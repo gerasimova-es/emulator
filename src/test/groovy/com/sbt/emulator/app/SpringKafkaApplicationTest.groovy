@@ -1,7 +1,7 @@
 package com.sbt.emulator.app
 
-import com.sbt.emulator.dto.JournalMessage
-import com.sbt.emulator.app.config.kafka.JournalKafkaMessageSender
+import com.sbt.emulator.model.Journal
+import com.sbt.emulator.transport.JournalCreatorClient
 import org.junit.ClassRule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,13 +19,15 @@ class SpringKafkaApplicationTest {
     public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, IN_TOPIC)
 
     @Autowired
-    private JournalKafkaMessageSender sender
+    private JournalCreatorClient client
 
     @Test
     void testSend() throws Exception {
-        sender.send(
-                new JournalMessage(
-                        header: ["created": new Date(), "requestId": UUID.randomUUID().toString()],
-                        payload: "I'm message!"))
+        client.sendJournal(
+                new Journal(
+                        "createDate": new Date(),
+                        "requestId": UUID.randomUUID().toString(),
+                        "body": "I'm message!")
+        )
     }
 }

@@ -1,8 +1,9 @@
-package com.sbt.emulator.app.config.kafka
-
+package com.sbt.emulator.app.config
 
 import com.sbt.emulator.dto.JournalMessage
+import com.sbt.emulator.transport.JournalCreatorClient
 import com.sbt.emulator.transport.MessageSender
+import com.sbt.emulator.transport.kafka.KafkaMessageSender
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -40,6 +41,11 @@ class SenderContext {
 
     @Bean
     MessageSender<JournalMessage> sender() {
-        return new JournalKafkaMessageSender()
+        return new KafkaMessageSender<JournalMessage>()
+    }
+
+    @Bean
+    JournalCreatorClient creatorClient() {
+        return new JournalCreatorClient(sender())
     }
 }

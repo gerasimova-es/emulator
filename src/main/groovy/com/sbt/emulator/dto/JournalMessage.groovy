@@ -7,7 +7,6 @@ import org.springframework.messaging.MessageHeaders
  * Сообещние
  */
 class JournalMessage implements Message<String> {
-    private static final long serialVersionUID = 1
     /**
      * Заголовок
      */
