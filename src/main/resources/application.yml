@@ -1,0 +1,6 @@
+kafka:
+  bootstrap-servers: localhost:9092
+  max-poll-size: 10
+  topic:
+    income: journal.in
+    outcome: journal.out
