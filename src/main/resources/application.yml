@@ -1,6 +1,6 @@
 kafka:
-  bootstrap-servers: localhost:9092
-  max-poll-size: 10
+  bootstrap-servers: ${spring.embedded.kafka.brokers}
+  group: journal
   topic:
-    income: journal.in
-    outcome: journal.out
+    income: journal.t
+    outcome: journal.t

@@ -1,28 +1,35 @@
 package com.sbt.emulator.dto
 
-import org.springframework.messaging.Message
-import org.springframework.messaging.MessageHeaders
+import groovy.transform.CompileStatic
 
 /**
  * Сообещние
  */
-class JournalMessage implements Message<String> {
+@CompileStatic
+class JournalMessage {
     /**
      * Заголовок
      */
-    MessageHeaders header
+    JournalHeader header
     /**
      * Тело
      */
     String payload
 
-    @Override
     String getPayload() {
         return payload
     }
 
-    @Override
-    MessageHeaders getHeaders() {
+    JournalHeader getHeader() {
         return header
+    }
+
+
+    @Override
+    String toString() {
+        return "JournalMessage{" +
+                "header=" + header?.toString() +
+                ", payload='" + payload + '\'' +
+                '}'
     }
 }

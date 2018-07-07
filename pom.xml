@@ -22,6 +22,7 @@
         <groovy.version>2.4.7</groovy.version>
         <sqlite.version>3.23.1</sqlite.version>
         <jackson.version>2.9.6</jackson.version>
+        <common.lang.version>2.6</common.lang.version>
     </properties>
 
     <dependencies>
@@ -59,16 +60,11 @@
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-        <!--<artifactId>jackson-core</artifactId>-->
-        <!--<version>${jackson.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-        <!--<artifactId>jackson-databind</artifactId>-->
-        <!--<version>${jackson.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${common.lang.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

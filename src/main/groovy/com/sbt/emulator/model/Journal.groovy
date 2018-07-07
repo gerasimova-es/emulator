@@ -1,6 +1,10 @@
 package com.sbt.emulator.model
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class Journal {
+    Long id
     String requestId
     Date createDate
     String body
@@ -8,9 +12,10 @@ class Journal {
     @Override
     String toString() {
         return "Journal{" +
-                "requestId='" + requestId + '\'' +
+                "id=" + id +
+                ", requestId='" + requestId + '\'' +
                 ", createDate=" + createDate +
                 ", body='" + body + '\'' +
-                '}'
+                '}';
     }
 }

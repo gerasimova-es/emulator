@@ -1,8 +1,11 @@
 package com.sbt.emulator.app.config
 
+import com.sbt.emulator.app.listener.JournalMessageListener
 import com.sbt.emulator.dto.JournalMessage
-import com.sbt.emulator.transport.BatchMessageReceiver
-import com.sbt.emulator.transport.JournalMessageListener
+import com.sbt.emulator.service.JournalService
+import com.sbt.emulator.service.JournalServiceImpl
+import com.sbt.emulator.transport.MessageReceiver
+import groovy.transform.CompileStatic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
@@ -18,22 +21,26 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 
 @Configuration
 @EnableKafka
+@CompileStatic
 class ReceiverContext {
 
     @Value('${kafka.bootstrap-servers}')
     private String bootstrapServers
 
-    @Value('${kafka.max-poll-size}')
-    private Integer maxPollSize
+    @Value('${kafka.group}')
+    private String groupId
 
     @Bean
     Map<String, Object> consumerConfigs() {
         def config = [:]
+        //todo set bootstrap servers and group id from standin-service configuration (PlatformPropertyLoader)
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
+        //todo use jaxb serializer like journal creator client library
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class)
-        config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollSize)
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "journal")
+//        config.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 128)
+
         return config
     }
 
@@ -48,11 +55,17 @@ class ReceiverContext {
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, JournalMessage>> kafkaListenerContainerFactory() {
         return new ConcurrentKafkaListenerContainerFactory<>(
-                consumerFactory: consumerFactory(), batchListener: true)
+                consumerFactory: consumerFactory(),
+                batchListener: Boolean.FALSE, autoStartup: Boolean.TRUE)
     }
 
     @Bean
-    BatchMessageReceiver<JournalMessage> receiver() {
-        return new JournalMessageListener()
+    JournalService journalService() {
+        return new JournalServiceImpl()
+    }
+
+    @Bean
+    MessageReceiver<JournalMessage> receiver() {
+        return new JournalMessageListener(journalService())
     }
 }

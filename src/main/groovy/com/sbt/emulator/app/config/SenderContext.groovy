@@ -1,9 +1,10 @@
 package com.sbt.emulator.app.config
 
+import com.sbt.emulator.app.client.JournalCreatorClient
 import com.sbt.emulator.dto.JournalMessage
-import com.sbt.emulator.transport.JournalCreatorClient
 import com.sbt.emulator.transport.MessageSender
 import com.sbt.emulator.transport.kafka.KafkaMessageSender
+import groovy.transform.CompileStatic
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
@@ -15,6 +16,7 @@ import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
+@CompileStatic
 class SenderContext {
 
     @Value('${kafka.bootstrap-servers}')
@@ -26,6 +28,8 @@ class SenderContext {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class)
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class)
+//        config.put(ProducerConfig.SEND_BUFFER_CONFIG, 128)
+        //todo set send buffer size
         return config
     }
 
