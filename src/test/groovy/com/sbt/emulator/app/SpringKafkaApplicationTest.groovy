@@ -13,17 +13,18 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class SpringKafkaApplicationTest {
-    private static final String IN_TOPIC = "journal.t"
+    private static final String IN_TOPIC = "journal"
 
     @ClassRule
     public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, IN_TOPIC)
+
 
     @Autowired
     private JournalCreatorClient client
 
     @Test
     void testSend() throws Exception {
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 300; i++) {
             client.send(
                     new Journal(
                             "createDate": new Date(),

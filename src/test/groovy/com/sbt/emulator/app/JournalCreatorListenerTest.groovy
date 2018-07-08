@@ -14,7 +14,7 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @CompileStatic
-class JournalCreatorClientTest {
+class JournalCreatorListenerTest {
     private JournalService service
     private JournalMessageListener listener
 

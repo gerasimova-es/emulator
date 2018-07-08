@@ -15,9 +15,8 @@ import org.slf4j.LoggerFactory
 @CompileStatic
 class JournalCreatorClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(JournalCreatorClient.class)
-
     /**
-     * Отправляет данные по требуемому протоколу
+     * Транспорт для отправки сообщений
      */
     private MessageSender<JournalMessage> sender
 
@@ -30,11 +29,11 @@ class JournalCreatorClient {
      * @param journal журнал
      */
     void send(Journal journal) {
-        LOGGER.info("sending journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("sending journal: {}", journal)
         }
         try {
+            LOGGER.info("sending journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
             sender.send(new Converter(journal).convert())
             LOGGER.info("sent successfully journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
         } catch (Exception exc) {

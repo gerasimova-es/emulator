@@ -17,10 +17,13 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
 @CompileStatic
-class SenderContext {
+class SenderConfig {
 
     @Value('${kafka.bootstrap-servers}')
-    private String bootstrapServers
+    String bootstrapServers
+
+    @Value('${kafka.topic.outcome}')
+    String topic
 
     @Bean
     Map<String, Object> producerConfigs() {
@@ -45,7 +48,7 @@ class SenderContext {
 
     @Bean
     MessageSender<JournalMessage> sender() {
-        return new KafkaMessageSender<JournalMessage>()
+        return new KafkaMessageSender<JournalMessage>(kafkaTemplate(), topic)
     }
 
     @Bean

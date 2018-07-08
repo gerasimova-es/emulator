@@ -1,7 +1,10 @@
 package com.sbt.emulator.app.config
 
 import com.sbt.emulator.app.listener.JournalMessageListener
+import com.sbt.emulator.dao.DataRepository
+import com.sbt.emulator.dao.JournalRepository
 import com.sbt.emulator.dto.JournalMessage
+import com.sbt.emulator.model.Journal
 import com.sbt.emulator.service.JournalService
 import com.sbt.emulator.service.JournalServiceImpl
 import com.sbt.emulator.transport.MessageReceiver
@@ -22,13 +25,13 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 @Configuration
 @EnableKafka
 @CompileStatic
-class ReceiverContext {
+class ReceiverConfig {
 
     @Value('${kafka.bootstrap-servers}')
-    private String bootstrapServers
+    String bootstrapServers
 
     @Value('${kafka.group}')
-    private String groupId
+    String groupId
 
     @Bean
     Map<String, Object> consumerConfigs() {
@@ -55,13 +58,17 @@ class ReceiverContext {
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, JournalMessage>> kafkaListenerContainerFactory() {
         return new ConcurrentKafkaListenerContainerFactory<>(
-                consumerFactory: consumerFactory(),
-                batchListener: Boolean.FALSE, autoStartup: Boolean.TRUE)
+                consumerFactory: consumerFactory(), autoStartup: Boolean.TRUE)
+    }
+
+    @Bean
+    DataRepository<Journal> journalRepository() {
+        return new JournalRepository()
     }
 
     @Bean
     JournalService journalService() {
-        return new JournalServiceImpl()
+        return new JournalServiceImpl(journalRepository())
     }
 
     @Bean

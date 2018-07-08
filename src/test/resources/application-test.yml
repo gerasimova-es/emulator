@@ -2,5 +2,8 @@ kafka:
   bootstrap-servers: ${spring.embedded.kafka.brokers}
   group: journal
   topic:
-    income: journal.t
-    outcome: journal.t
+    income: journal
+    outcome: journal
+jdbc:
+  driver: org.sqlite.JDBC
+  url: jdbc:sqlite:C:/work/repo/emulator/src/main/mydb.db

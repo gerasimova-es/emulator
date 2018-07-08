@@ -2,8 +2,6 @@ package com.sbt.emulator.transport.kafka
 
 import com.sbt.emulator.transport.MessageSender
 import groovy.transform.CompileStatic
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
 /**
  * Отправляет сообщения в кафку
@@ -11,12 +9,19 @@ import org.springframework.kafka.core.KafkaTemplate
  */
 @CompileStatic
 class KafkaMessageSender<T> implements MessageSender<T> {
+    /**
+     * Топик, в который будут отправляться сообщения
+     */
+    String topic
+    /**
+     * темплейт для взаимодействия с message producer
+     */
+    KafkaTemplate<String, T> kafkaTemplate
 
-    @Autowired
-    private KafkaTemplate<String, T> kafkaTemplate
-
-    @Value('${kafka.topic.outcome}')
-    private String topic
+    KafkaMessageSender(KafkaTemplate<String, T> kafkaTemplate, String topic) {
+        this.kafkaTemplate = kafkaTemplate
+        this.topic = topic
+    }
 
     @Override
     void send(T message) {
