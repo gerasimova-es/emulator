@@ -1,5 +1,6 @@
 package com.sbt.emulator.integration
 
+import com.sbt.emulator.app.ReaderApplication
 import com.sbt.emulator.app.client.JournalCreatorClient
 import com.sbt.emulator.model.Journal
 import org.junit.ClassRule
@@ -11,12 +12,14 @@ import org.springframework.kafka.test.rule.KafkaEmbedded
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = ReaderApplication.class)
 class SpringKafkaApplicationTest {
     private static final String IN_TOPIC = "journal"
+    private static final String FAILURE_TOPIC = "journal_failure"
 
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1, true, IN_TOPIC)
+    public static KafkaEmbedded embeddedKafka =
+            new KafkaEmbedded(1, true, IN_TOPIC, FAILURE_TOPIC)
 
 
     @Autowired

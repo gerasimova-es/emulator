@@ -20,7 +20,10 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.kafka.listener.KafkaListenerErrorHandler
+import org.springframework.kafka.listener.ListenerExecutionFailedException
 import org.springframework.kafka.support.serializer.JsonDeserializer
+import org.springframework.messaging.Message
 
 @Configuration
 @EnableKafka
@@ -49,7 +52,7 @@ class ReceiverConfig {
 
     @Bean
     ConsumerFactory<String, JournalMessage> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(
+        new DefaultKafkaConsumerFactory<>(
                 consumerConfigs(),
                 new StringDeserializer(),
                 new JsonDeserializer<>(JournalMessage.class))
@@ -57,22 +60,32 @@ class ReceiverConfig {
 
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, JournalMessage>> kafkaListenerContainerFactory() {
-        return new ConcurrentKafkaListenerContainerFactory<>(
+        new ConcurrentKafkaListenerContainerFactory<>(
                 consumerFactory: consumerFactory(), autoStartup: Boolean.TRUE)
     }
 
     @Bean
     DataRepository<Journal> journalRepository() {
-        return new JournalRepository()
+        new JournalRepository()
     }
 
     @Bean
     JournalService journalService() {
-        return new JournalServiceImpl(journalRepository())
+        new JournalServiceImpl(journalRepository())
     }
 
     @Bean
     MessageReceiver<JournalMessage> receiver() {
-        return new JournalMessageListener(journalService())
+        new JournalMessageListener(journalService())
+    }
+
+    @Bean
+    KafkaListenerErrorHandler voidSendToErrorHandler() {
+        return new KafkaListenerErrorHandler() {
+            @Override
+            Object handleError(Message<?> message, ListenerExecutionFailedException exception) throws Exception {
+                return null //todo logging some information about error and message
+            }
+        }
     }
 }

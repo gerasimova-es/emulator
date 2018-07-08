@@ -8,7 +8,7 @@ import org.apache.commons.lang.Validate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
-
+import org.springframework.messaging.handler.annotation.SendTo
 /**
  * Обрабатывает сообщения с журналами
  */
@@ -24,20 +24,22 @@ class JournalMessageListener implements MessageReceiver<JournalMessage> {
     }
 
     @Override
-    @KafkaListener(topics = '${kafka.topic.income}', containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(
+            id = "journalListener",
+            topics = '${kafka.topic.income}',
+            errorHandler = "voidSendToErrorHandler",
+            containerFactory = "kafkaListenerContainerFactory")
+    @SendTo('${kafka.topic.failure}')
     void receive(JournalMessage message) {
         Validate.notNull(message)
-        try {
-            //todo may be aspects instead of direct calling logger.debug
-            LOGGER.info("handling message [requestId = {}]", message?.header?.requestId)
-            Journal journal = journalService.save(
-                    new Converter(message)
-                            .validate()
-                            .convert())
-            LOGGER.info("message was handled successfully [requestId = {}, id = {}]", journal.requestId, journal.requestId)
-        } catch (Exception exc) {
-            LOGGER.error("saving journal error [message = {}]", message, exc)
-        }
+
+        //todo maybe to use aspects instead of direct calling logger
+        LOGGER.debug("handling message [requestId = {}]", message.header?.requestId)
+        Journal journal = journalService.save(
+                new Converter(message)
+                        .validate()
+                        .convert())
+        LOGGER.debug("message was handled successfully [requestId = {}, id = {}]", journal.requestId, journal.requestId)
     }
 
     private static class Converter {
@@ -65,4 +67,5 @@ class JournalMessageListener implements MessageReceiver<JournalMessage> {
             )
         }
     }
+
 }
