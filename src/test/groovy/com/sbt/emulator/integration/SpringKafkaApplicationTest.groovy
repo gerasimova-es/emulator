@@ -1,4 +1,4 @@
-package com.sbt.emulator.app
+package com.sbt.emulator.integration
 
 import com.sbt.emulator.app.client.JournalCreatorClient
 import com.sbt.emulator.model.Journal

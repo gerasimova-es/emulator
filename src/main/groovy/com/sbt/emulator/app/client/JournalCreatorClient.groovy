@@ -6,6 +6,7 @@ import com.sbt.emulator.exception.JournalSendException
 import com.sbt.emulator.model.Journal
 import com.sbt.emulator.transport.MessageSender
 import groovy.transform.CompileStatic
+import org.apache.commons.lang.Validate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -18,7 +19,7 @@ class JournalCreatorClient {
     /**
      * Транспорт для отправки сообщений
      */
-    private MessageSender<JournalMessage> sender
+    MessageSender<JournalMessage> sender
 
     JournalCreatorClient(MessageSender<JournalMessage> sender) {
         this.sender = sender
@@ -29,13 +30,16 @@ class JournalCreatorClient {
      * @param journal журнал
      */
     void send(Journal journal) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("sending journal: {}", journal)
-        }
+        Validate.notNull(journal)
+        Validate.noNullElements([
+                journal.requestId,
+                journal.createDate,
+                journal.body])
         try {
-            LOGGER.info("sending journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
-            sender.send(new Converter(journal).convert())
-            LOGGER.info("sent successfully journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
+            LOGGER.debug("sending journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
+            sender.send(
+                    new Converter(journal).convert())
+            LOGGER.debug("sent successfully journal [requestId = {}, createDate = {}]", journal.requestId, journal.createDate)
         } catch (Exception exc) {
             LOGGER.error("error journal message {}", journal, exc)
             throw new JournalSendException(exc)
@@ -43,7 +47,7 @@ class JournalCreatorClient {
     }
 
     private static class Converter {
-        private Journal journal
+        Journal journal
 
         Converter(Journal journal) {
             this.journal = journal

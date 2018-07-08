@@ -28,6 +28,7 @@ class JournalMessageListener implements MessageReceiver<JournalMessage> {
     void receive(JournalMessage message) {
         Validate.notNull(message)
         try {
+            //todo may be aspects instead of direct calling logger.debug
             LOGGER.info("handling message [requestId = {}]", message?.header?.requestId)
             Journal journal = journalService.save(
                     new Converter(message)

@@ -1,4 +1,4 @@
-package com.sbt.emulator.app
+package com.sbt.emulator.app.listener
 
 import com.sbt.emulator.app.listener.JournalMessageListener
 import com.sbt.emulator.dto.JournalHeader
