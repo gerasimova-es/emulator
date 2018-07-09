@@ -14,12 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ReaderApplication.class)
 class SpringKafkaApplicationTest {
-    private static final String IN_TOPIC = "journal"
     private static final String FAILURE_TOPIC = "journal_failure"
 
     @ClassRule
     public static KafkaEmbedded embeddedKafka =
-            new KafkaEmbedded(1, true, IN_TOPIC, FAILURE_TOPIC)
+            new KafkaEmbedded(1, true, FAILURE_TOPIC)
 
     @Autowired
     private JournalCreatorClient client
@@ -37,5 +36,5 @@ class SpringKafkaApplicationTest {
         }
     }
 
-    //todo test listener
+    //todo test mock
 }
