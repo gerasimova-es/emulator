@@ -6,9 +6,9 @@ import org.apache.commons.lang.Validate
 
 class JournalServiceImpl implements JournalService {
 
-    DataRepository journalDao
+    DataRepository<Journal> journalDao
 
-    JournalServiceImpl(DataRepository journalDao) {
+    JournalServiceImpl(DataRepository<Journal> journalDao) {
         this.journalDao = journalDao
     }
 

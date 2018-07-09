@@ -14,6 +14,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.config.KafkaListenerContainerFactory
@@ -65,18 +66,18 @@ class ReceiverConfig {
     }
 
     @Bean
-    DataRepository<Journal> journalRepository() {
-        new JournalRepository()
+    DataRepository<Journal> journalRepository(JdbcOperations jdbcOperations) {
+        new JournalRepository(jdbcOperations)
     }
 
     @Bean
-    JournalService journalService() {
-        new JournalServiceImpl(journalRepository())
+    JournalService journalService(DataRepository<Journal> journalRepository) {
+        new JournalServiceImpl(journalRepository)
     }
 
     @Bean
-    MessageReceiver<JournalMessage> receiver() {
-        new JournalMessageListener(journalService())
+    MessageReceiver<JournalMessage> receiver(JournalService journalService) {
+        new JournalMessageListener(journalService)
     }
 
     @Bean
@@ -84,7 +85,9 @@ class ReceiverConfig {
         return new KafkaListenerErrorHandler() {
             @Override
             Object handleError(Message<?> message, ListenerExecutionFailedException exception) throws Exception {
-                return null //todo logging some information about error and message
+                //todo logging some information about error and message
+                return message //return result will be ignored...
+
             }
         }
     }

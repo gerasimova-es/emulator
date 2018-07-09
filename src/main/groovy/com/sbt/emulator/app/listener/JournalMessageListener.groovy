@@ -35,6 +35,7 @@ class JournalMessageListener implements MessageReceiver<JournalMessage> {
 
         //todo maybe to use aspects instead of direct calling logger
         LOGGER.debug("handling message [requestId = {}]", message.header?.requestId)
+
         Journal journal = journalService.save(
                 new Converter(message)
                         .validate()

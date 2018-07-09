@@ -7,4 +7,4 @@ kafka:
     failure: journal_failures
 jdbc:
   driver: org.sqlite.JDBC
-  url: jdbc:sqlite:C:/work/repo/emulator/src/main/mydb.db
+  url: jdbc:sqlite:${user.dir}/src/main/resources/database/emulator.db

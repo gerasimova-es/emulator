@@ -4,7 +4,6 @@ import com.sbt.emulator.exception.JournalSaveException
 import com.sbt.emulator.model.Journal
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.jdbc.core.PreparedStatementCreator
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -21,9 +20,11 @@ class JournalRepository implements DataRepository<Journal> {
             """INSERT INTO journal(request_id, create_date, body)                   
                VALUES (?, ?, ?);"""
 
-    @Autowired
-    //todo may be initialize by constructor
     private JdbcOperations jdbcOperations
+
+    JournalRepository(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations
+    }
 
     @Override
     Journal save(Journal journal) {

@@ -21,9 +21,10 @@ class SpringKafkaApplicationTest {
     public static KafkaEmbedded embeddedKafka =
             new KafkaEmbedded(1, true, IN_TOPIC, FAILURE_TOPIC)
 
-
     @Autowired
     private JournalCreatorClient client
+
+    //todo @before method with execute create-table.sql
 
     @Test
     void testSend() throws Exception {
@@ -34,6 +35,7 @@ class SpringKafkaApplicationTest {
                             "requestId": UUID.randomUUID().toString(),
                             "body": "I'm journal message 1!"))
         }
-        Thread.sleep(10000)
     }
+
+    //todo test listener
 }
