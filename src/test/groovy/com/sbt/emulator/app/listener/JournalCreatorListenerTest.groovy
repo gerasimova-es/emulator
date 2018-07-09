@@ -1,8 +1,8 @@
 package com.sbt.emulator.app.listener
 
-import com.sbt.emulator.app.listener.JournalMessageListener
 import com.sbt.emulator.dto.JournalHeader
 import com.sbt.emulator.dto.JournalMessage
+import com.sbt.emulator.mock.JournalMessageListener
 import com.sbt.emulator.model.Journal
 import com.sbt.emulator.service.JournalService
 import groovy.transform.CompileStatic

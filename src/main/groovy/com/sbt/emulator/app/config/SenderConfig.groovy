@@ -31,8 +31,6 @@ class SenderConfig {
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class)
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class)
-//        config.put(ProducerConfig.SEND_BUFFER_CONFIG, 128)
-        //todo set send buffer size
         return config
     }
 

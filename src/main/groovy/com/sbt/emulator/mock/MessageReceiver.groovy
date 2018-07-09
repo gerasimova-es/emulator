@@ -1,4 +1,4 @@
-package com.sbt.emulator.transport
+package com.sbt.emulator.mock
 
 /**
  * Вычитвает сообщение

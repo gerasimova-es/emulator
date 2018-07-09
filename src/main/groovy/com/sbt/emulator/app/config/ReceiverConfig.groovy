@@ -1,13 +1,13 @@
 package com.sbt.emulator.app.config
 
-import com.sbt.emulator.app.listener.JournalMessageListener
 import com.sbt.emulator.dao.DataRepository
 import com.sbt.emulator.dao.JournalRepository
 import com.sbt.emulator.dto.JournalMessage
+import com.sbt.emulator.mock.JournalMessageListener
+import com.sbt.emulator.mock.MessageReceiver
 import com.sbt.emulator.model.Journal
 import com.sbt.emulator.service.JournalService
 import com.sbt.emulator.service.JournalServiceImpl
-import com.sbt.emulator.transport.MessageReceiver
 import groovy.transform.CompileStatic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -44,10 +44,7 @@ class ReceiverConfig {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
         config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
-        //todo use jaxb serializer like journal creator client library
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class)
-//        config.put(ConsumerConfig.RECEIVE_BUFFER_CONFIG, 128)
-
         return config
     }
 

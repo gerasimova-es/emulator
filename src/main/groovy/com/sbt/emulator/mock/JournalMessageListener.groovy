@@ -1,17 +1,19 @@
-package com.sbt.emulator.app.listener
+package com.sbt.emulator.mock
 
 import com.sbt.emulator.dto.JournalMessage
 import com.sbt.emulator.model.Journal
 import com.sbt.emulator.service.JournalService
-import com.sbt.emulator.transport.MessageReceiver
+import groovy.transform.CompileStatic
 import org.apache.commons.lang.Validate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.messaging.handler.annotation.SendTo
+
 /**
  * Обрабатывает сообщения с журналами
  */
+@CompileStatic
 class JournalMessageListener implements MessageReceiver<JournalMessage> {
     static final Logger LOGGER = LoggerFactory.getLogger(JournalMessageListener.class)
     /**
